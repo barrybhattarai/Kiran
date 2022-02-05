@@ -3,40 +3,26 @@
 
 #include <GLFW/glfw3.h>
 
-#include "linmath.h"
 
 #include <cstdlib>
 #include <cstdio>
+#include<fstream>
+#include <iostream>
+#include<sstream>
+#include <config.h>
+#include <filesystem>
 
-static const struct {
-    float x, y;
-    float r, g, b;
-} vertices[3] =
-        {
-                {-0.6f, -0.4f, 1.f, 0.0f, 0.f},
-                {0.6f,  -0.4f, 0.f, 1.0f, 0.f},
-                {0.f,   0.6f,  0.f, 0.0f, 1.0f}
-        };
-
-static const char *vertex_shader_text =
-        "#version 110\n"
-        "uniform mat4 MVP;\n"
-        "attribute vec3 vCol;\n"
-        "attribute vec2 vPos;\n"
-        "   out vec3 color;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
-        "    color = vCol;\n"
-        "}\n";
-
-static const char *fragment_shader_text =
-        "#version 110\n"
-        "  in vec3 color;\n"
-        "void main()\n"
-        "{\n"
-        "    gl_FragColor = vec4(color, 1.0f);\n"
-        "}\n";
+std::string readFileIntoString(const std::string &path) {
+    auto ss = std::ostringstream{};
+    std::ifstream input_file(path);
+    if (!input_file.is_open()) {
+        std::cerr << "Could not open the file - '"
+                  << path << "'" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+    ss << input_file.rdbuf();
+    return ss.str();
+}
 
 static void error_callback(int error, const char *description) {
     fprintf(stderr, "Error: %s\n", description);
@@ -47,30 +33,47 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
         glfwSetWindowShouldClose(window, GLFW_TRUE);
 }
 
+static void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
+
+
 int main() {
+    std::cout<<"Sage v"<<Sage_VERSION_MAJOR<<std::endl;
     GLFWwindow *window;
     GLuint vertex_buffer, vertex_shader, fragment_shader, program;
-    GLint mvp_location, vpos_location, vcol_location;
+    const char *vShaderSource;
+    const char *fShaderSource;
+    GLint vpos_location;
 
     glfwSetErrorCallback(error_callback);
     if (!glfwInit()) exit(EXIT_FAILURE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
-    window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "Sage", nullptr, nullptr);
     if (!window) {
         glfwTerminate();
         exit(EXIT_FAILURE);
     }
 
     glfwSetKeyCallback(window, key_callback);
-
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwMakeContextCurrent(window);
     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
     glfwSwapInterval(1);
 
+//    GLuint VertexArrayID;
+//    glGenVertexArrays(1, &VertexArrayID);
+//    glBindVertexArray(VertexArrayID);
+
+    float vertices[] = {0, 0.5, -0.5, 0, 1, -1};
+    //read shader files
+ std::string v_source = readFileIntoString("vertex_shader.glsl");
+ std::string f_source = readFileIntoString("fragment_shader.glsl");
 
 
     glGenBuffers(1, &vertex_buffer);
@@ -78,55 +81,40 @@ int main() {
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
+    vShaderSource = v_source.c_str();
+    glShaderSource(vertex_shader, 1, &vShaderSource, NULL);
     glCompileShader(vertex_shader);
 
     fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
+    fShaderSource = f_source.c_str();
+    glShaderSource(fragment_shader, 1, &fShaderSource, NULL);
     glCompileShader(fragment_shader);
 
     program = glCreateProgram();
     glAttachShader(program, vertex_shader);
     glAttachShader(program, fragment_shader);
     glLinkProgram(program);
-
-    mvp_location = glGetUniformLocation(program, "MVP");
-    vpos_location = glGetAttribLocation(program, "vPos");
-    vcol_location = glGetAttribLocation(program, "vCol");
-
-    glEnableVertexAttribArray(vpos_location);
-    glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE,
-                          sizeof(vertices[0]), (void *) nullptr);
-    glEnableVertexAttribArray(vcol_location);
-    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
-                          sizeof(vertices[0]), (void *) (sizeof(float) * 2));
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer);
+    glVertexAttribPointer(
+            0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+            2,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void *) 0            // array buffer offset
+    );
 
     while (!glfwWindowShouldClose(window)) {
-        float ratio;
-        int width, height;
-        mat4x4 m, p, mvp;
-
-        glfwGetFramebufferSize(window, &width, &height);
-        ratio = (float) width / (float) height;
-
-        glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        mat4x4_identity(m);
-        mat4x4_rotate_Z(m, m, (float) glfwGetTime());
-        mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        mat4x4_mul(mvp, p, m);
-
         glUseProgram(program);
-        glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat *) mvp);
         glDrawArrays(GL_TRIANGLES, 0, 3);
-
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
     glfwDestroyWindow(window);
-
     glfwTerminate();
+    std::cout << "closing";
     exit(EXIT_SUCCESS);
 }

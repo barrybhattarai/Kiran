@@ -1,0 +1,2 @@
+#define Sage_VERSION_MAJOR @Sage_VERSION_MAJOR@
+#define Sage_VERSION_MINOR @Sage_VERSION_MINOR@
