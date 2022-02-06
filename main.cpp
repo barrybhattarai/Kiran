@@ -5,60 +5,50 @@
 #include <config.h>
 #include "VBO.h"
 #include "VAO.h"
-#include "util.h"
 #include "Shader.h"
-
+#include "EBO.h"
 
 int main() {
     std::cout << "Sage v" << Sage_VERSION_MAJOR << std::endl;
     MainWindow window(512, 512, "Sage");
     window.makeCurrentContext();
-
     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
-    VAO vao;
-    vao.bind();
     float vertices[] = {
-            -0.5f, (-0.5f * sqrtf(3) / 3), 1, 0, 0,
-            0.5f, (-0.5f * sqrtf(3) / 3), 0, 1, 0,
-            0.0f, (0.5f * sqrtf(3) * 2 / 3), 0, 0, 1
+            -0.5f, 0.5, 0, 1, 0, 0,
+            -0.5f, -0.5, 0, 0, 1, 0,
+            0.5f, -0.5, 0, 0, 0, 1,
+            0.5, 0.5, 0, 1, 1, 1
+
     };
 
-
-    VBO vertex_buffer(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    GLuint indices[] = {
+            0, 1, 2,
+            0, 2, 3
+    };
     Shader shader("vertex_shader.glsl", "fragment_shader.glsl");
 
+    VAO vao;
+    vao.bind();
 
-    glEnableVertexAttribArray(0);
-    vertex_buffer.bind();
-    glVertexAttribPointer(
-            0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-            2,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            sizeof(float) * 5,                  // stride
-            (void *) 0            // array buffer offset
-    );
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(
-            1,
-            3,
-            GL_FLOAT,
-            GL_TRUE,
-            sizeof(float) * 5,
-            (void *) (sizeof(float) * 2)
 
-    );
+    VBO vbo(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    EBO ebo(sizeof(indices), indices);
+    ebo.bind();
+
+    vao.linkAttrib(vbo, 0, 3, GL_FLOAT, 6 * sizeof(float), nullptr);
+    vao.linkAttrib(vbo, 1, 3, GL_FLOAT, 6 * sizeof(float), (void *) (3 * sizeof(float)));
+
     glClearColor(0.5, 0.5, 0.5, 1);
     while (!window.shouldClose()) {
         glClear(GL_COLOR_BUFFER_BIT);
         shader.use();
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         window.swapBuffer();
         glfwPollEvents();
     }
 
     window.destroy();
     glfwTerminate();
-    std::cout << "closing";
+    std::cout << "Closing";
     exit(EXIT_SUCCESS);
 }
