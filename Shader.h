@@ -13,6 +13,7 @@ Shader(const char* vertexShaderPath, const char*  fragmentShaderPath);
 void use();
 private:
     void detach(GLuint shader);
+    void compileStatus(GLuint shader);
 
 };
 
