@@ -20,6 +20,8 @@ Shader::Shader(const char *vertexShaderPath, const char *fragmentShaderPath) {
     glAttachShader(ID, vertexShader);
     glAttachShader(ID, fragmentShader);
     glLinkProgram(ID);
+    detach(vertexShader);
+    detach(fragmentShader);
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
@@ -27,4 +29,8 @@ Shader::Shader(const char *vertexShaderPath, const char *fragmentShaderPath) {
 
 void Shader::use() {
     glUseProgram(ID);
+}
+
+void Shader::detach(GLuint shader) {
+    glDetachShader(ID, shader);
 }
