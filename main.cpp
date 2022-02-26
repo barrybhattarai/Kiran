@@ -10,7 +10,7 @@
 #include <string>
 
 int main() {
-    std::cout << "Sage v" << Sage_VERSION_MAJOR << std::endl;
+    std::cout << "Sage v" << Sage_VERSION_MAJOR << "." << Sage_VERSION_MINOR << std::endl;
     MainWindow window(512, 512, "Sage");
     window.makeCurrentContext();
     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
@@ -47,7 +47,7 @@ int main() {
         timeDiff = currentTime - previousTime;
         fpsCounter++;
         if (timeDiff >= 0.5) {
-            std::string FPS = std::to_string((unsigned  int)( fpsCounter/timeDiff));
+            std::string FPS = std::to_string((unsigned int) (fpsCounter / timeDiff));
             std::string newTitle = "Sage " + FPS + " FPS";
             glfwSetWindowTitle(window.instance, newTitle.c_str());
             previousTime = currentTime;

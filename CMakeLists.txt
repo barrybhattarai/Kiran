@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
-project(Sage VERSION 1.0)
+project(Sage VERSION 1.1)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(Sage main.cpp glad.c VBO.cpp  VAO.cpp MainWindow.cpp  Shader.cpp  util.cpp EBO.cpp EBO.h)
