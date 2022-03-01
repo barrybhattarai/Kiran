@@ -1,12 +1,12 @@
 namespace glm {
     template<typename T, qualifier Q>
     GLM_FUNC_QUALIFIER T
-    dot(qua<T, Q>
+            dot(qua < T, Q >
     const& x,
     qua <T, Q> const &y
     ) {
     GLM_STATIC_ASSERT(std::numeric_limits<T>::is_iec559,
-    "'dot' accepts only floating-point inputs");
+                      "'dot' accepts only floating-point inputs");
     return detail::compute_dot<qua < T, Q>, T, detail::is_aligned<Q>::value>
     ::call(x, y
     );
@@ -14,7 +14,7 @@ namespace glm {
 
 template<typename T, qualifier Q>
 GLM_FUNC_QUALIFIER T
-length(qua<T, Q>
+        length(qua < T, Q >
 const& q)
 {
 return
@@ -24,8 +24,8 @@ glm::sqrt (dot(q, q));
 }
 
 template<typename T, qualifier Q>
-GLM_FUNC_QUALIFIER qua<T, Q>
-normalize(qua<T, Q>
+GLM_FUNC_QUALIFIER qua <T, Q>
+        normalize(qua < T, Q >
 const& q)
 {
 T len = length(q);
@@ -46,10 +46,10 @@ z *oneOverLen
 }
 
 template<typename T, qualifier Q>
-GLM_FUNC_QUALIFIER qua<T, Q>
-cross(qua<T, Q>
+GLM_FUNC_QUALIFIER qua <T, Q>
+        cross(qua < T, Q >
 const& q1,
-qua<T, Q> const &q2
+qua <T, Q> const &q2
 )
 {
 return

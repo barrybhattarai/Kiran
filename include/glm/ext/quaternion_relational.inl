@@ -1,7 +1,7 @@
 namespace glm {
     template<typename T, qualifier Q>
     GLM_FUNC_QUALIFIER vec<4, bool, Q>
-    equal(qua<T, Q>
+            equal(qua < T, Q >
     const& x,
     qua <T, Q> const &y
     ) {
@@ -20,7 +20,7 @@ namespace glm {
 
 template<typename T, qualifier Q>
 GLM_FUNC_QUALIFIER vec<4, bool, Q>
-equal(qua<T, Q>
+        equal(qua < T, Q >
 const& x,
 qua <T, Q> const &y, T
 epsilon)
@@ -33,7 +33,7 @@ lessThan(abs(v), vec<4, T, Q>(epsilon)
 
 template<typename T, qualifier Q>
 GLM_FUNC_QUALIFIER vec<4, bool, Q>
-notEqual(qua<T, Q>
+        notEqual(qua < T, Q >
 const& x,
 qua <T, Q> const &y
 )
@@ -53,7 +53,7 @@ Result;
 
 template<typename T, qualifier Q>
 GLM_FUNC_QUALIFIER vec<4, bool, Q>
-notEqual(qua<T, Q>
+        notEqual(qua < T, Q >
 const& x,
 qua <T, Q> const &y, T
 epsilon)

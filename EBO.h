@@ -6,11 +6,15 @@
 #define SAGE_EBO_H
 
 #include<glad/glad.h>
+
 class EBO {
 public:
-    GLuint  ID;
-    EBO(GLsizeiptr size, const void* indices);
+    GLuint ID;
+
+    EBO(GLsizeiptr size, const void *indices);
+
     void bind();
+
     void unbind();
 };
 

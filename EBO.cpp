@@ -4,7 +4,7 @@
 
 #include "EBO.h"
 
-EBO::EBO(GLsizeiptr  size, const void *indices) {
+EBO::EBO(GLsizeiptr size, const void *indices) {
 
     glGenBuffers(1, &ID);
     bind();

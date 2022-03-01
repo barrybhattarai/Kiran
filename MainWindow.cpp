@@ -7,6 +7,8 @@
 MainWindow::MainWindow(int width, int height, const char *title) {
     init();
     instance = glfwCreateWindow(width, height, title, nullptr, nullptr);
+    setWidth(width);
+    setHeight(height);
     if (!instance) {
         glfwTerminate();
         exit(EXIT_FAILURE);
@@ -24,11 +26,15 @@ void MainWindow::init() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 4);
 
+
 }
 
 void MainWindow::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
+    if(key == GLFW_KEY_UP && action == GLFW_PRESS){
+
+    }
 }
 
 void MainWindow::error_callback(int error, const char *description) {
@@ -39,7 +45,7 @@ void MainWindow::framebuffer_size_callback(GLFWwindow *window, int width, int he
     glViewport(0, 0, width, height);
 }
 
-void MainWindow::makeCurrentContext() {
+void MainWindow::makeCurrentContext() const {
     glfwMakeContextCurrent(instance);
 }
 
@@ -55,4 +61,20 @@ void MainWindow::destroy() {
 
 bool MainWindow::shouldClose() {
     return glfwWindowShouldClose(instance);
+}
+
+int MainWindow::getWidth() const {
+    return width;
+}
+
+void MainWindow::setWidth(int width) {
+   this->width = width;
+}
+
+int MainWindow::getHeight() const {
+    return height;
+}
+
+void MainWindow::setHeight(int height) {
+    this->height = height;
 }
