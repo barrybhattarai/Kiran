@@ -100,8 +100,8 @@ int main() {
     glfwSwapInterval(1);
     //transform matrix
     glm::mat4 transform = glm::mat4(1.0f);
-    glm::mat4 scale = glm::mat4 (1.0);
-    glm::mat4 rotate = glm::rotate(glm::radians(30.0f), glm::vec3(1,0,0));
+    glm::mat4 scale = glm::mat4(1.0);
+    glm::mat4 rotate = glm::rotate(glm::radians(30.0f), glm::vec3(1, 0, 0));
     glm::mat4 translate = glm::mat4(1.0);
     glm::mat4 modelMatrix = translate * rotate * scale;
     Camera camera(glm::vec3(0, 0, 4),
@@ -113,7 +113,7 @@ int main() {
     int fps;
     int fpsCounter = 0;
     double previousTime = 0;
-    while (!window.shouldClose()){
+    while (!window.shouldClose()) {
         getFPS(fpsCounter, previousTime, fps);
         glfwSetWindowTitle(window.instance, std::to_string(fps).append(" Sage").c_str());
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

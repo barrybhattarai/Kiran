@@ -32,7 +32,7 @@ void MainWindow::init() {
 void MainWindow::key_callback(GLFWwindow *window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
-    if(key == GLFW_KEY_UP && action == GLFW_PRESS){
+    if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
 
     }
 }
@@ -68,7 +68,7 @@ int MainWindow::getWidth() const {
 }
 
 void MainWindow::setWidth(int width) {
-   this->width = width;
+    this->width = width;
 }
 
 int MainWindow::getHeight() const {
