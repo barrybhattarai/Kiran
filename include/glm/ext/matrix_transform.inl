@@ -8,7 +8,7 @@ namespace glm {
 
     template<typename T, qualifier Q>
     GLM_FUNC_QUALIFIER mat<4, 4, T, Q>
-            translate(mat < 4, 4, T, Q >
+    translate(mat<4, 4, T, Q>
     const& m,
     vec<3, T, Q> const &v
     ) {
@@ -20,7 +20,7 @@ namespace glm {
 
 template<typename T, qualifier Q>
 GLM_FUNC_QUALIFIER mat<4, 4, T, Q>
-        rotate(mat < 4, 4, T, Q >
+rotate(mat<4, 4, T, Q>
 const& m,
 T angle, vec<3, T, Q>
 const& v)
@@ -62,7 +62,7 @@ Result;
 
 template<typename T, qualifier Q>
 GLM_FUNC_QUALIFIER mat<4, 4, T, Q>
-        rotate_slow(mat < 4, 4, T, Q >
+rotate_slow(mat<4, 4, T, Q>
 const& m,
 T angle, vec<3, T, Q>
 const& v)
@@ -135,7 +135,7 @@ m *Result;
 
 template<typename T, qualifier Q>
 GLM_FUNC_QUALIFIER mat<4, 4, T, Q>
-        scale(mat < 4, 4, T, Q >
+scale(mat<4, 4, T, Q>
 const& m,
 vec<3, T, Q> const &v
 )
@@ -151,7 +151,7 @@ Result;
 
 template<typename T, qualifier Q>
 GLM_FUNC_QUALIFIER mat<4, 4, T, Q>
-        scale_slow(mat < 4, 4, T, Q >
+scale_slow(mat<4, 4, T, Q>
 const& m,
 vec<3, T, Q> const &v
 )
@@ -169,7 +169,7 @@ m *Result;
 
 template<typename T, qualifier Q>
 GLM_FUNC_QUALIFIER mat<4, 4, T, Q>
-        lookAtRH(vec < 3, T, Q >
+lookAtRH(vec<3, T, Q>
 const& eye,
 vec<3, T, Q> const &center, vec<3, T, Q>
 const& up)
@@ -200,10 +200,10 @@ Result[1][2] =-f.
 y;
 Result[2][2] =-f.
 z;
-Result[3][0] =-
+Result[3][0] -=
 dot(s, eye
 );
-Result[3][1] =-
+Result[3][1] =
 dot(u, eye
 );
 Result[3][2] =
@@ -215,7 +215,7 @@ Result;
 
 template<typename T, qualifier Q>
 GLM_FUNC_QUALIFIER mat<4, 4, T, Q>
-        lookAtLH(vec < 3, T, Q >
+lookAtLH(vec<3, T, Q>
 const& eye,
 vec<3, T, Q> const &center, vec<3, T, Q>
 const& up)
@@ -261,7 +261,7 @@ Result;
 
 template<typename T, qualifier Q>
 GLM_FUNC_QUALIFIER mat<4, 4, T, Q>
-        lookAt(vec < 3, T, Q >
+lookAt(vec<3, T, Q>
 const& eye,
 vec<3, T, Q> const &center, vec<3, T, Q>
 const& up)
@@ -273,7 +273,7 @@ lookAtLH(eye, center, up
 );
 else
 return
-lookAtRH(eye, center, up
+glm::lookAtRH<float, glm::packed_highp>(eye, center, up
 );
 }
 }//namespace glm
